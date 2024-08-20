@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { IoMdArrowDropright } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { Form, Link } from "react-router-dom";
-import axios from "axios";
 
 const SignUp = () => {
   const [UserData, setUserData] = useState({
@@ -44,12 +43,21 @@ const SignUp = () => {
         } else {
           console.log("clicked");
           // let response = await axios.post("/api/signup", { UserData });
-          const response = await fetch("https://vc-app-one.vercel.app/api/auth/signup", {
+          const response = await fetch("/api/api/auth/signup", {
             method: "POST",
             body: JSON.stringify(UserData),
+            headers: {
+              "Content-Type": "application/json",
+            },
           });
-          const data = await response.json(); 
-          console.log('data',data);
+          setUserData({
+            name: "",
+            email: "",
+            password: "",
+          });
+
+          const data = await response.json();
+          console.log("data", data);
         }
       }
     } catch (error) {

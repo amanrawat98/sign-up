@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
@@ -14,7 +14,7 @@ const SignIn = () => {
     password: "",
   });
 
-   const handleuserchange = (e) => {
+  const handleUserChange = (e) => {
     const { value, name } = e.target;
 
     console.log(value, name);
@@ -23,6 +23,27 @@ const SignIn = () => {
       [name]: value,
     });
   };
+
+  const handleUserLogin = async () => {
+    if (UserData.email === "" || UserData.password === "") {
+      alert("Fields Cant Be Empty");
+    } else {
+      const response = await fetch("/api/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(UserData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setUserData({
+        email: "",
+        password: "",
+      });
+      const data = await response.json();
+      console.log("data", data);
+    }
+  };
+
   return (
     <div className="w-[80%] md:w-[30vw] bg-[#1c1e2c] h-fit text-white font-sans px-3 md:px-14 py-6 rounded-lg">
       <div className="flex justify-center items-center font-bold text-xl gap-[2px] mb-6">
@@ -66,11 +87,10 @@ const SignIn = () => {
           <Input
             type="email"
             id="email"
-            className="font-sans text-sm bg-[#252a41] border-none px-2 h-fit  py-[6px]"
-            onChange={handleuserchange}
+            className="font-sans text-sm bg-[#252a41] border-none px-2 h-fit text-white py-[6px]"
+            onChange={handleUserChange}
             value={UserData.email}
-
-
+            name="email"
           />
         </div>
 
@@ -82,13 +102,15 @@ const SignIn = () => {
             type="password"
             id="password"
             className="font-sans text-sm bg-[#252a41] border-none px-2 h-fit  py-[6px] "
-            onChange={handleuserchange}
+            onChange={handleUserChange}
             value={UserData.password}
-
-
+            name="password"
           />
         </div>
-        <Button className="w-full flex items-center justify-center gap-2">
+        <Button
+          className="w-full flex items-center justify-center gap-2"
+          onClick={handleUserLogin}
+        >
           Continue <IoMdArrowDropright className="h-fit w-fit p-0 m-0" />
         </Button>
       </div>
